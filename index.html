@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>60天財經生活素養 · 暑假課程</title>
+<style>
+  :root{
+    --paper:#FAF7EF;
+    --paper-shadow:#EFE9DA;
+    --ink:#232323;
+    --ink-soft:#6B6B63;
+    --red:#C23B33;
+    --red-soft:#F4DCD9;
+    --line:#DDD5C4;
+    --grey-page:#E4DFD1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    line-height:1.7;
+  }
+  h1,h2{
+    font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;
+    font-weight:700;
+  }
+
+  /* ---------- HERO : DESK CALENDAR ---------- */
+  .hero{
+    padding:6vh 6vw 5vh;
+    text-align:center;
+  }
+  .rings{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-bottom:-14px;
+    position:relative;
+    z-index:3;
+  }
+  .ring{
+    width:20px;height:20px;
+    border-radius:50%;
+    background:var(--paper);
+    border:3px solid var(--ink-soft);
+  }
+
+  .calendar-stack{
+    position:relative;
+    max-width:340px;
+    margin:0 auto;
+    padding-top:2rem;
+  }
+  .stack-page{
+    position:absolute;
+    top:14px;left:50%;
+    width:88%;
+    height:100%;
+    background:var(--grey-page);
+    border:1px solid var(--line);
+    clip-path:polygon(0% 0%,100% 0%,100% 92%,95% 96%,90% 91%,85% 97%,80% 92%,75% 96%,70% 91%,65% 97%,60% 92%,55% 96%,50% 91%,45% 97%,40% 92%,35% 96%,30% 91%,25% 97%,20% 92%,15% 96%,10% 91%,5% 97%,0% 92%);
+  }
+  .stack-page.p2{transform:translateX(-50%) rotate(-6deg);z-index:1;}
+  .stack-page.p1{transform:translateX(-50%) rotate(4deg);top:8px;z-index:2;background:#EAE4D4;}
+
+  .today-card{
+    position:relative;
+    z-index:4;
+    background:#fff;
+    border:1px solid var(--line);
+    padding:2rem 1.6rem 3rem;
+    clip-path:polygon(0% 0%,100% 0%,100% 92%,95% 96%,90% 91%,85% 97%,80% 92%,75% 96%,70% 91%,65% 97%,60% 92%,55% 96%,50% 91%,45% 97%,40% 92%,35% 96%,30% 91%,25% 97%,20% 92%,15% 96%,10% 91%,5% 97%,0% 92%);
+    box-shadow:0 10px 26px rgba(35,35,35,0.12);
+  }
+  .today-tag{
+    display:inline-block;
+    background:var(--red);
+    color:#fff;
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    padding:0.25rem 0.7rem;
+    border-radius:3px;
+    font-weight:700;
+  }
+  .today-num{
+    font-family:"Noto Sans TC",sans-serif;
+    font-weight:900;
+    font-size:5.2rem;
+    color:var(--ink);
+    line-height:1;
+    margin:0.6rem 0 0.1rem;
+  }
+  .today-sub{
+    font-size:0.8rem;
+    letter-spacing:0.2em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+  .today-title{
+    margin-top:1rem;
+    font-size:1.15rem;
+    color:var(--ink);
+  }
+
+  .hero-desc{
+    max-width:480px;
+    margin:2.4rem auto 0;
+    color:var(--ink-soft);
+    font-size:0.98rem;
+  }
+
+  .cta-btn{
+    display:inline-block;
+    margin-top:1.6rem;
+    background:var(--red);
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+    padding:0.85rem 2rem;
+    border-radius:4px;
+    font-size:1rem;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+  .cta-btn:hover{
+    background:#A5312B;
+    transform:translateY(-2px);
+  }
+
+  /* ---------- MAP SECTION ---------- */
+  .map-section{
+    padding:4rem 6vw 6rem;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .map-header{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 2.6rem;
+  }
+  .eyebrow{
+    font-size:0.75rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--red);
+    font-weight:700;
+  }
+  .map-header h2{
+    font-size:clamp(1.5rem,3.2vw,2rem);
+    margin:0.6rem 0 0.7rem;
+  }
+  .map-header p{color:var(--ink-soft);font-size:0.95rem;}
+
+  .day-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+    gap:0.8rem;
+  }
+
+  /* flip card structure */
+  .day-tile-wrap{
+    aspect-ratio:3/4;
+    perspective:900px;
+  }
+  .day-tile-inner{
+    position:relative;
+    width:100%;height:100%;
+    transform-style:preserve-3d;
+    transition:transform 0.55s cubic-bezier(.4,.2,.2,1);
+    cursor:pointer;
+  }
+  .day-tile-inner.flipped{transform:rotateY(180deg);}
+
+  .tile-face{
+    position:absolute;inset:0;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0.4rem;
+    clip-path:polygon(0% 0%,100% 0%,100% 88%,90% 94%,80% 88%,70% 94%,60% 88%,50% 94%,40% 88%,30% 94%,20% 88%,10% 94%,0% 88%);
+  }
+  .tile-front{
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .tile-back{
+    transform:rotateY(180deg);
+  }
+
+  .day-tile-wrap.locked .tile-front{
+    background:var(--grey-page);
+    border:1px dashed #C9C0AC;
+    color:#A79E8A;
+  }
+  .day-tile-wrap.locked .tile-back{
+    background:var(--grey-page);
+    border:1px dashed #C9C0AC;
+    color:var(--ink-soft);
+    font-size:0.66rem;
+    padding:0.6rem;
+  }
+
+  .day-tile-wrap.done .tile-front{
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 6px 14px rgba(35,35,35,0.1);
+  }
+  .day-tile-wrap.done:hover .tile-inner-hover{transform:translateY(-3px);}
+  .day-tile-wrap.done .tile-back{
+    background:var(--red);
+    border:1px solid var(--red);
+    color:#fff;
+  }
+  .day-tile-wrap.done .tile-back .ttl{
+    font-size:0.68rem;
+    line-height:1.3;
+    margin-bottom:0.4rem;
+  }
+  .day-tile-wrap.done .tile-back .go{
+    font-size:0.62rem;
+    opacity:0.85;
+  }
+
+  .num{
+    font-family:"Noto Sans TC",sans-serif;
+    font-weight:900;
+    font-size:1.5rem;
+  }
+  .day-tile-wrap.done .tile-front .num{color:var(--red);}
+
+  .legend{
+    display:flex;
+    justify-content:center;
+    gap:2rem;
+    margin-top:2.6rem;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .legend span{display:flex;align-items:center;gap:0.5rem;}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .dot.done{background:#fff;border:1px solid var(--line);box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+  .dot.locked{background:var(--grey-page);border:1px dashed #C9C0AC;}
+
+  footer{
+    text-align:center;
+    padding:2.4rem;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+  }
+
+  @media(max-width:600px){
+    .day-grid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr));}
+    .today-num{font-size:4rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="rings">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+  </div>
+  <div class="calendar-stack">
+    <div class="stack-page p2"></div>
+    <div class="stack-page p1"></div>
+    <div class="today-card">
+      <span class="today-tag">SUMMER 2026</span>
+      <div class="today-num" id="hero-day-num">01</div>
+      <div class="today-sub">DAY</div>
+      <div class="today-title" id="hero-day-title">聖嬰現象 El Niño</div>
+    </div>
+  </div>
+
+  <p class="hero-desc">每天一個 20–30 分鐘的小主題，從天氣現象、投資觀念到生活理財，像撕日曆一樣，一天一頁慢慢累積。</p>
+  <a class="cta-btn" id="hero-cta" href="day1-el-nino.html">撕開今天 →</a>
+</div>
+
+<section class="map-section">
+  <div class="map-header">
+    <div class="eyebrow">學習地圖</div>
+    <h2>60天行事曆</h2>
+    <p>點一下白色日曆頁，會先翻面顯示當天內容，再帶妳進去閱讀；灰色虛線頁代表還沒到的日子。</p>
+  </div>
+
+  <div class="day-grid" id="day-grid"></div>
+
+  <div class="legend">
+    <span><i class="dot done"></i> 已上線，點我翻面</span>
+    <span><i class="dot locked"></i> 尚未上線</span>
+  </div>
+</section>
+
+<footer>60天財金生活小知識課程 · 由 Claude 協助製作</footer>
+
+<script>
+  // ------------------------------------------------------------
+  // 之後新增每一天的內容，只要在這個陣列裡「新增一行」就好，
+  // 不需要更動下面的任何 HTML／CSS，網格會自動更新。
+  // ------------------------------------------------------------
+  const TOTAL_DAYS = 60;
+  const days = [
+    { day: 1, title: "聖嬰現象 El Niño", file: "day1-el-nino.html" }
+    // { day: 2, title: "颱風分級標準", file: "day2-typhoon.html" },
+  ];
+
+  const dayMap = {};
+  days.forEach(d => dayMap[d.day] = d);
+
+  // hero shows the latest (most recent) day
+  const latest = days[days.length - 1];
+  document.getElementById('hero-day-num').textContent = String(latest.day).padStart(2,'0');
+  document.getElementById('hero-day-title').textContent = latest.title;
+  document.getElementById('hero-cta').href = latest.file;
+
+  const grid = document.getElementById('day-grid');
+  let html = '';
+  for(let i = 1; i <= TOTAL_DAYS; i++){
+    const d = dayMap[i];
+    if(d){
+      html += `
+        <div class="day-tile-wrap done" data-day="${i}" onclick="flipDone(event,this,'${d.file}')">
+          <div class="day-tile-inner">
+            <div class="tile-face tile-front">
+              <div class="num">${String(i).padStart(2,'0')}</div>
+            </div>
+            <div class="tile-face tile-back">
+              <div class="ttl">${d.title}</div>
+              <div class="go">前往閱讀 →</div>
+            </div>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="day-tile-wrap locked" data-day="${i}" onclick="flipLocked(event,this,${i})">
+          <div class="day-tile-inner">
+            <div class="tile-face tile-front">
+              <div class="num">${i}</div>
+            </div>
+            <div class="tile-face tile-back">
+              Day ${i}<br>尚未上線
+            </div>
+          </div>
+        </div>`;
+    }
+  }
+  grid.innerHTML = html;
+
+  function flipDone(e, wrap, href){
+    const inner = wrap.querySelector('.day-tile-inner');
+    if(inner.classList.contains('flipped')) return;
+    inner.classList.add('flipped');
+    setTimeout(() => { window.location.href = href; }, 750);
+  }
+
+  function flipLocked(e, wrap, dayNum){
+    const inner = wrap.querySelector('.day-tile-inner');
+    if(inner.classList.contains('flipped')) return;
+    inner.classList.add('flipped');
+    setTimeout(() => { inner.classList.remove('flipped'); }, 1300);
+  }
+</script>
+
+</body>
+</html>
