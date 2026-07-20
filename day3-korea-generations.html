@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 3 · 從漢江奇蹟到 N 拋世代</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #10161d;
+    --ink-2: #171f28;
+    --ink-3: #1e2833;
+    --paper: #ece5d6;
+    --paper-2: #e2dac8;
+    --river: #4a8aa3;
+    --river-soft: #2f5a6c;
+    --alarm: #c1442d;
+    --alarm-soft: #7a2c1e;
+    --text: #f2f4f7;
+    --text-soft: #b7c0cc;
+    --text-paper: #241f18;
+    --text-paper-soft: #5c5445;
+    --serif: 'Noto Serif TC', serif;
+    --sans: 'Noto Sans TC', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{
+    scroll-behavior:smooth;
+    background:var(--ink);
+    color-scheme:dark;
+  }
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    overflow:hidden;
+    border-bottom:1px solid #263140;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(74,138,163,0.16), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 85%, rgba(193,68,45,0.14), transparent 60%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.22em;
+    color:var(--river);
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:900;
+    font-size:clamp(34px, 7vw, 68px);
+    line-height:1.22;
+    margin:0 0 28px;
+    letter-spacing:0.01em;
+  }
+  .hero h1 .accent{color:var(--alarm);}
+  .hero p.lede{
+    font-size:17px;
+    color:var(--text-soft);
+    max-width:560px;
+    margin:0 0 8px;
+  }
+  .hero .scrollcue{
+    margin-top:56px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-soft);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scrollcue .line{width:36px; height:1px; background:var(--text-soft); position:relative; overflow:hidden;}
+  .scrollcue .line::after{
+    content:""; position:absolute; left:-100%; top:0; width:100%; height:100%;
+    background:var(--river);
+    animation:flow 2.4s linear infinite;
+  }
+  @keyframes flow{to{left:100%;}}
+
+  section{position:relative; padding:96px 0;}
+  .section-head{margin-bottom:56px;}
+  .kicker{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.18em;
+    color:var(--river); text-transform:uppercase; margin-bottom:14px;
+  }
+  h2.title{
+    font-family:var(--serif); font-weight:700; font-size:clamp(24px,4vw,34px);
+    margin:0 0 14px; color:var(--text);
+  }
+  .lede2{color:var(--text-soft); max-width:620px; font-size:15.5px;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- RIVER TIMELINE ---------- */
+  .river-section{padding-top:72px;}
+  .timeline{position:relative; padding-left:56px;}
+  .timeline-spine{
+    position:absolute; left:20px; top:6px; bottom:6px; width:34px;
+    overflow:hidden;
+  }
+  .timeline-spine svg{width:100%; height:100%; display:block;}
+  .era{position:relative; padding-bottom:64px;}
+  .era:last-child{padding-bottom:0;}
+  .era-node{
+    position:absolute; left:-56px; top:2px;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--ink);
+    border:2px solid var(--river);
+    box-shadow:0 0 0 5px var(--ink);
+  }
+  .era.crisis .era-node{border-color:var(--alarm); background:var(--alarm);}
+  .era-date{
+    font-family:var(--mono); font-size:13px; color:var(--river);
+    letter-spacing:0.04em; margin-bottom:8px; display:block;
+  }
+  .era.crisis .era-date{color:var(--alarm);}
+  .era h3{
+    font-family:var(--serif); font-size:20px; font-weight:600; margin:0 0 10px; color:var(--text);
+  }
+  .era p{color:var(--text-soft); font-size:14.5px; margin:0; max-width:600px;}
+  .era.crisis{
+    background:linear-gradient(90deg, rgba(193,68,45,0.08), transparent 70%);
+    margin-left:-20px; padding-left:20px; border-radius:4px;
+  }
+  .tag{
+    display:inline-block; font-family:var(--mono); font-size:11px;
+    padding:3px 9px; border:1px solid var(--river-soft); border-radius:20px;
+    color:var(--river); margin-top:12px; letter-spacing:0.03em;
+  }
+  .era.crisis .tag{border-color:var(--alarm-soft); color:#e2836f;}
+
+  /* ---------- DUAL PRESSURE ---------- */
+  .dual-wrap{position:relative;}
+  .converge-graphic{
+    display:flex; justify-content:center; margin:0 0 8px;
+  }
+  .converge-graphic svg{width:100%; max-width:420px; height:auto; display:block;}
+  .dual-cols{
+    display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  }
+  @media (max-width:680px){ .dual-cols{grid-template-columns:1fr;} }
+  .track{
+    background:var(--ink-2); border:1px solid #263140; border-radius:10px;
+    padding:26px 24px;
+  }
+  .track.edu{border-top:3px solid var(--river);}
+  .track.chaebol{border-top:3px solid var(--alarm);}
+  .track h4{
+    font-family:var(--serif); font-size:18px; margin:0 0 4px;
+    color:var(--text);
+  }
+  .track .sub{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-soft);
+    margin-bottom:18px; display:block;
+  }
+  .track ul{margin:0; padding:0; list-style:none;}
+  .track li{
+    font-size:14px; color:var(--text-soft); padding:11px 0;
+    border-top:1px solid #232d38;
+  }
+  .track li:first-child{border-top:none; padding-top:0;}
+  .track li b{color:var(--text); font-weight:500;}
+  .track .stat{
+    font-family:var(--mono); color:var(--river); font-weight:600;
+  }
+  .track.chaebol .stat{color:#e2836f;}
+
+  .confluence{
+    text-align:center; margin-top:34px; padding:24px;
+    border:1px dashed #3a4757; border-radius:10px;
+    background:rgba(74,138,163,0.05);
+  }
+  .confluence p{margin:0; color:var(--text-soft); font-size:14.5px; max-width:560px; margin:0 auto;}
+  .confluence b{color:var(--text);}
+
+  /* ---------- DISCARD LIST (N拋) ---------- */
+  .discard-field{
+    display:flex; flex-wrap:wrap; gap:14px; padding:36px 0 12px;
+    justify-content:center;
+  }
+  .discard-item{
+    font-family:var(--serif); font-size:15px; color:var(--text-paper);
+    background:var(--paper); padding:10px 18px; border-radius:3px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.25);
+  }
+  .discard-item:nth-child(odd){transform:rotate(-2.4deg);}
+  .discard-item:nth-child(even){transform:rotate(2deg);}
+  .discard-item:nth-child(3n){transform:rotate(-1deg) translateY(6px);}
+  .discard-item.n{
+    background:transparent; border:2px dashed var(--alarm); color:var(--alarm);
+    font-family:var(--mono); box-shadow:none; transform:rotate(0deg);
+  }
+
+  /* ---------- STAT GRID ---------- */
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1px; background:#263140; border:1px solid #263140; border-radius:10px; overflow:hidden;
+  }
+  .stat-card{background:var(--ink-2); padding:26px 22px;}
+  .stat-num{
+    font-family:var(--mono); font-size:clamp(22px,3vw,30px); font-weight:600;
+    color:var(--text); display:block; margin-bottom:6px;
+  }
+  .stat-num.alarm{color:var(--alarm);}
+  .stat-label{font-size:12.5px; color:var(--text-soft);}
+
+  /* ---------- CLOSING ---------- */
+  .closing{
+    background:var(--paper); color:var(--text-paper); border-radius:16px;
+    padding:52px clamp(24px,5vw,56px); margin:20px 0 40px;
+  }
+  .closing .kicker{color:var(--alarm-soft);}
+  .closing h2{font-family:var(--serif); font-size:clamp(22px,3.4vw,30px); margin:0 0 20px; font-weight:700; color:var(--text-paper);}
+  .closing p{color:var(--text-paper-soft); font-size:15.5px; max-width:640px;}
+  .closing p+p{margin-top:16px;}
+
+  footer{
+    text-align:center; padding:40px 24px 60px; color:var(--text-soft); font-size:12px;
+    font-family:var(--mono);
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Day 3 · 한강의 기적 → N포세대</div>
+    <h1>漢江奇蹟如何流成<br><span class="accent">N 拋世代</span>的乾涸河床</h1>
+    <p class="lede">一部從戰後廢墟、經濟奇蹟、金融風暴，到教育內捲與財閥壟斷的韓國社會編年史——為什麼今天的年輕人，連戀愛都成了奢侈品。</p>
+    <div class="scrollcue"><span class="line"></span>往下捲動，順著時間河流往下走</div>
+  </div>
+</header>
+
+<section class="river-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Chapter 01 — 時間河流</div>
+      <h2 class="title">從赤貧到崩解：七十年的轉折</h2>
+      <p class="lede2">這條時間線，是韓國從全球最窮國家之一，到創造「漢江奇蹟」，再到被一場金融風暴攔腰折斷的過程。1997 年是整條河流的分水嶺——在那之後，才開始出現「拋」這個字。</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-spine">
+        <svg viewBox="0 0 40 1400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="riverGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4a8aa3"/>
+              <stop offset="55%" stop-color="#4a8aa3"/>
+              <stop offset="68%" stop-color="#c1442d"/>
+              <stop offset="100%" stop-color="#7a2c1e"/>
+            </linearGradient>
+          </defs>
+          <path d="M20,0 C34,60 6,110 20,170 C34,230 6,280 20,340 C34,400 6,450 20,510
+                   C34,570 6,620 20,680 C34,740 6,790 20,850
+                   C30,900 10,940 20,980
+                   C34,1040 6,1090 20,1150 C34,1210 6,1260 20,1320 L20,1400"
+                fill="none" stroke="url(#riverGrad)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">1950 – 1953</span>
+        <h3>廢墟起點</h3>
+        <p>韓戰結束後，韓國是全球最貧窮的國家之一，人均所得只有幾十美元，幾乎沒有像樣的工業基礎，主要仰賴美國援助維生。</p>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">1960s – 1970s</span>
+        <h3>漢江奇蹟：財閥的誕生</h3>
+        <p>朴正熙政府推動出口導向的工業化政策，集中資源扶植三星、現代、樂金等企業。現代集團創辦人鄭周永的父親正是朴正熙在軍校的老師，靠這層關係拿到汽車、鋼鐵等壟斷產業的生產權——財閥與政府的「裙帶資本主義」自此奠基。</p>
+        <span class="tag">政商裙帶關係成型</span>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">1988 / 1996</span>
+        <h3>奧運與 OECD</h3>
+        <p>首爾奧運象徵性地宣告「脫貧入富」，1996 年韓國正式加入 OECD，躋身已開發國家俱樂部——漢江奇蹟走到頂點。</p>
+      </div>
+
+      <div class="era crisis reveal">
+        <div class="era-node"></div>
+        <span class="era-date">1997</span>
+        <h3>轉捩點：亞洲金融風暴</h3>
+        <p>危機重創韓國勞動市場，終身雇用制迅速崩解，就業型態轉向臨時化、不穩定。歷屆政府雖承諾改善年輕人處境，卻始終未能成功。這道裂縫，是後來所有「拋」的起點。</p>
+        <span class="tag">整條河流的分水嶺</span>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">2011</span>
+        <h3>「三拋世代」誕生</h3>
+        <p>網路新詞出現，指稱因經濟壓力放棄戀愛、結婚、生育的一代年輕人。調查顯示，逾五成的人坦言原因是「我沒有任何積蓄」。</p>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">2015 前後</span>
+        <h3>五拋、七拋接連出現</h3>
+        <p>房價高漲、生活壓力加重，「五拋世代」加上放棄購屋與人際關係；隨後「七拋世代」再加上放棄夢想與希望。當年青年失業率一度高達 10%。</p>
+      </div>
+
+      <div class="era reveal">
+        <div class="era-node"></div>
+        <span class="era-date">現在</span>
+        <h3>N 拋世代 × MZ 世代</h3>
+        <p>可拋棄的項目已無上限，用「N」代表「無數個」。這個標籤與「MZ 世代」並存——一邊被形容重視自我與體驗式消費，一邊卻是結構性壓力下不得不然的產物。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dual-wrap">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Chapter 02 — 兩條支流</div>
+      <h2 class="title">教育窄門 × 財閥窄門</h2>
+      <p class="lede2">1997 年之後，河流分成兩條支流，各自收緊，最終匯流成同一個結果。一條是教育內捲，一條是財閥壟斷；兩邊的邏輯不同，但都指向同一句話——不進入某個窄門，人生就會被判定失敗。</p>
+    </div>
+
+    <div class="converge-graphic reveal">
+      <svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMid meet">
+        <path d="M40,0 C40,60 190,60 200,120" fill="none" stroke="#4a8aa3" stroke-width="3" stroke-linecap="round"/>
+        <path d="M360,0 C360,60 210,60 200,120" fill="none" stroke="#c1442d" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="200" cy="126" r="6" fill="#ece5d6"/>
+      </svg>
+    </div>
+
+    <div class="dual-cols">
+      <div class="track edu reveal">
+        <h4>教育軌道</h4>
+        <span class="sub">EDUCATION · SKY & 修能考試</span>
+        <ul>
+          <li>1962 年起建立國家統一入學考試制度，取代各校自主招生</li>
+          <li>1966–1995 的兩個 15 年間，高等教育普及率從 <span class="stat">5% 衝到 50%</span>，是全球最快</li>
+          <li>SKY（首爾大學、高麗大學、延世大學）成為窄門，全國僅 <span class="stat">2%</span> 學生能考進</li>
+          <li>逾 <span class="stat">七成</span>學生上補習班，不補習被視為家長失職</li>
+          <li>代價是每年放榜後的「七月自殺潮」，親子關係也因升學壓力屢屢緊繃</li>
+          <li>2007 年李明博就任後推動「技術興邦論」欲扭轉名校迷思，成效有限</li>
+          <li>即使擠進 SKY，2017 年青年失業率仍達 <span class="stat">11.2%</span>，其中三分之一是大學畢業生</li>
+        </ul>
+      </div>
+
+      <div class="track chaebol reveal">
+        <h4>財閥軌道</h4>
+        <span class="sub">CHAEBOL · 三星共和國</span>
+        <ul>
+          <li>財閥崛起於政商裙帶關係，如今前五十大企業佔全國近 <span class="stat">四成</span>產值</li>
+          <li>三星集團一家的產值就佔全國 GDP 約 <span class="stat">20%</span></li>
+          <li>大企業與中小企業起薪可差到 <span class="stat">三倍以上</span></li>
+          <li>社會把「進財閥」等同人生成功，市面上甚至有專攻財閥面試的補習班</li>
+          <li>頂尖大學畢業生幾乎全部搶進財閥——某名校僅不到一成畢業生去小公司</li>
+          <li>人才長期被財閥虹吸，中小企業與新創持續人才荒，形成惡性循環</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="confluence reveal">
+      <p>兩條軌道匯流之處，就是「N 拋世代」——當教育窄門與就業窄門同時收緊，<b>年輕人發現無論多努力，都難以獲得上一代視為理所當然的人生里程碑</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Chapter 03 — 河口三角洲</div>
+      <h2 class="title">被拋棄的清單，還在增加</h2>
+      <p class="lede2">「N」沒有固定數字，代表著清單仍可能繼續變長。以下是目前為止，被公開討論過、韓國年輕人不得不放下的項目。</p>
+    </div>
+    <div class="discard-field reveal">
+      <span class="discard-item">戀愛</span>
+      <span class="discard-item">結婚</span>
+      <span class="discard-item">生子</span>
+      <span class="discard-item">買房</span>
+      <span class="discard-item">人際關係</span>
+      <span class="discard-item">夢想</span>
+      <span class="discard-item">希望</span>
+      <span class="discard-item n">N ...</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Chapter 04 — 現況與回音</div>
+      <h2 class="title">河流流到了哪裡</h2>
+      <p class="lede2">結構性壓力沒有隨口號消失，反而催生出更具體的數字與文化現象。</p>
+    </div>
+
+    <div class="stat-grid reveal">
+      <div class="stat-card">
+        <span class="stat-num alarm">42.1 萬</span>
+        <span class="stat-label">處於躺平狀態、不工作也不求職的韓國青年人數，創下新高</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">2 部電影</span>
+        <span class="stat-label">《寄生上流》與《因為討厭韓國》，皆映照這種絕望與想出走的渴望</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">2008</span>
+        <span class="stat-label">修法將法定退休年齡延後至 60 歲以上，受惠者多為大企業在職員工，反而延後年輕人渴望的職缺釋出</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">政府補助</span>
+        <span class="stat-label">文在寅政府一度將年輕世代列為弱勢族群並給予補助，等於官方承認「有志者事竟成」的說法已站不住腳</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="closing reveal">
+      <div class="kicker">結語</div>
+      <h2>這不是「不想要」，而是「被迫拋下」</h2>
+      <p>這場拋棄的故事，本質上不是年輕人不願意戀愛、結婚、生子，而是漢江奇蹟留下的結構——財閥壟斷、教育軍備競賽、政商裙帶——一路收緊，直到「普通的人生」變成一種奢侈品。</p>
+      <p>台灣近年討論「躺平」「厭世代」等現象時，也常借用這套韓國詞彙，因為背後的經濟邏輯何其相似：低薪、高房價、就業競爭與階級流動停滯，是東亞多個社會共同面對的困境。</p>
+    </div>
+  </div>
+</section>
+
+<footer>整理自公開報導與資料，作為背景脈絡參考，非窮盡式研究。</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(el=>io.observe(el));
+  } else {
+    els.forEach(el=>el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
